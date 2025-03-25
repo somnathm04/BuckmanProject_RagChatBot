@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Description AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h1 class="text-2xl font-bold mb-4 text-center">Image Description AI</h1>
+        
+        <form id="upload-form" class="space-y-4">
+            <input 
+                type="file" 
+                id="file-upload" 
+                accept="image/*" 
+                class="w-full p-2 border rounded"
+            >
+            <button 
+                type="submit" 
+                class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+            >
+                Describe Image
+            </button>
+        </form>
+
+        <div id="result" class="mt-4 hidden">
+            <img id="uploaded-image" class="w-full rounded mb-4" src="" alt="Uploaded Image">
+            <p id="description" class="text-gray-700"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('file-upload');
+            const resultDiv = document.getElementById('result');
+            const descriptionP = document.getElementById('description');
+            const uploadedImage = document.getElementById('uploaded-image');
+            
+            if (!fileInput.files.length) {
+                alert('Please select an image');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            axios.post('/describe', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                descriptionP.textContent = response.data.description;
+                uploadedImage.src = response.data.image_path;
+                resultDiv.classList.remove('hidden');
+            })
+            .catch(error => {
+                alert('Error describing image: ' + error.response.data.error);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+streamlit
+langchain>=0.1.12
+faiss-cpu 
+langchain-core
+langchain-google-genai 
+PyPDF2
+google-ai-generativelanguage
+langchain-community>=0.0.28
+pandas
+python-docx
+openpyxl
+langchain-mistralai
+python-dotenv
+tenacity
+langchain-openai
+
+
